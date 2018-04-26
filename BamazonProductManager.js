@@ -16,32 +16,46 @@ let productCache
 
 class BamazonProductManager {
     getAllProducts(callback) {
-        connection.query('SELECT * FROM products', (error, results, fields) => {
-            if (error) throw error
+        connection.query(
+            `SELECT * 
+            FROM products`,
+            (error, results, fields) => {
+                if (error) throw error
 
-            productCache = results
+                productCache = results
 
-            if (callback != undefined) {
-                callback(productCache)
-            }
-        })
+                if (callback != undefined) {
+                    callback(productCache)
+                }
+            })
     }
 
     getLowInventory(callback) {
-        connection.query('SELECT * FROM products WHERE stock_quantity < 5', (error, results, fields) => {
-            if (error) throw error
+        connection.query(
+            `SELECT * 
+            FROM products 
+            WHERE stock_quantity < 5`,
+            (error, results, fields) => {
+                if (error) throw error
 
-            if (callback != undefined) {
-                callback(results)
-            }
-        })
+                if (callback != undefined) {
+                    callback(results)
+                }
+            })
     }
 
     getAllDepartments(callback) {
-        connection.query('SELECT d.department_id, d.department_name, d.over_head_costs, SUM(COALESCE(p.product_sales, 0)) as product_sales, SUM(COALESCE(p.product_sales, 0)) - d.over_head_costs as total_profit FROM departments d LEFT JOIN products p ON d.department_name = p.department_name GROUP BY d.department_name ORDER BY d.department_id', (error, results, fields) => {
+        connection.query(
+            `SELECT d.department_id, d.department_name, d.over_head_costs, SUM(COALESCE(p.product_sales, 0)) as product_sales, 
+                    SUM(COALESCE(p.product_sales, 0)) - d.over_head_costs as total_profit 
+            FROM departments d 
+            LEFT JOIN products p ON d.department_name = p.department_name 
+            GROUP BY d.department_name 
+            ORDER BY d.department_id`,
+            (error, results, fields) => {
                 if (error) throw error
 
-                if(callback != undefined) {
+                if (callback != undefined) {
                     callback(results)
                 }
             })
@@ -69,37 +83,52 @@ class BamazonProductManager {
     }
 
     processOrder(id, qty, price, callback) {
-        connection.query('UPDATE products SET stock_quantity = stock_quantity - ?, product_sales = product_sales + ? WHERE item_id = ?', [qty, parseFloat((qty * price).toFixed(2)), id], (error, results, fields) => {
-            if (error) throw error
+        connection.query(
+            `UPDATE products 
+            SET stock_quantity = stock_quantity - ?, 
+                product_sales = product_sales + ? 
+            WHERE item_id = ?`,
+            [qty, parseFloat((qty * price).toFixed(2)), id], (error, results, fields) => {
+                if (error) throw error
 
-            console.log('Purchase total:'.bold, currencyFormatter.format(qty * price, { code: 'USD' }).green)
+                console.log('Purchase total:'.bold, currencyFormatter.format(qty * price, { code: 'USD' }).green)
 
-            this.getAllProducts(callback)
-        })
+                this.getAllProducts(callback)
+            })
     }
 
     addToInventory(id, qty, callback) {
-        connection.query('UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?', [qty, id], (error, results, fields) => {
-            if (error) throw error
+        connection.query(
+            `UPDATE products 
+            SET stock_quantity = stock_quantity + ? 
+            WHERE item_id = ?`,
+            [qty, id], (error, results, fields) => {
+                if (error) throw error
 
-            this.getAllProducts(callback)
-        })
+                this.getAllProducts(callback)
+            })
     }
 
     addNewDepartment(name, overhead, callback) {
-        connection.query('INSERT INTO departments (department_name, over_head_costs) VALUES (?, ?)', [name, overhead], (error, results, fields) => {
-            if (error) throw error
+        connection.query(
+            `INSERT INTO departments (department_name, over_head_costs) 
+            VALUES (?, ?)`,
+            [name, overhead], (error, results, fields) => {
+                if (error) throw error
 
-            this.getAllDepartments(callback)
-        })
+                this.getAllDepartments(callback)
+            })
     }
 
     addNewProduct(name, department, price, qty, callback) {
-        connection.query('INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?)', [name, department, price, qty], (error, results, fields) => {
-            if (error) throw error
+        connection.query(
+            `INSERT INTO products (product_name, department_name, price, stock_quantity) 
+            VALUES (?, ?, ?, ?)`,
+            [name, department, price, qty], (error, results, fields) => {
+                if (error) throw error
 
-            this.getAllProducts(callback)
-        })
+                this.getAllProducts(callback)
+            })
     }
 
     findProductById(id) {
