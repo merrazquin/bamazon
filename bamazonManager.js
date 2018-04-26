@@ -63,8 +63,8 @@ function promptToAddProduct(callback) {
         },
         {
             type: 'input',
-            name: 'category',
-            message: 'Enter the category name',
+            name: 'department',
+            message: 'Enter the department name',
             validate: notEmpty
         },
         {
@@ -92,7 +92,7 @@ function promptToAddProduct(callback) {
             }
         }
     ]).then(response => {
-        productManager.addNewProduct(response.name, response.category, parseFloat(response.price).toFixed(2), response.qty, callback)
+        productManager.addNewProduct(response.name, response.department, parseFloat(response.price).toFixed(2), response.qty, callback)
     })
 }
 

@@ -37,6 +37,16 @@ class BamazonProductManager {
         })
     }
 
+    getAllDepartments(callback) {
+        connection.query('SELECT d.department_id, d.department_name, d.over_head_costs, p.product_sales, COALESCE(p.product_sales, 0) - d.over_head_costs as total_profit FROM departments d LEFT JOIN products p ON d.department_name = p.department_name GROUP BY d.department_name ORDER BY d.department_id', (error, results, fields) => {
+                if (error) throw error
+
+                if(callback != undefined) {
+                    callback(results)
+                }
+            })
+    }
+
     displayProducts(products) {
         let table = new Table({
             head: ['ID', 'Name', 'Department', 'Price', 'Stock']
@@ -45,6 +55,16 @@ class BamazonProductManager {
             table.push([product.item_id, product.product_name, product.department_name, currencyFormatter.format(product.price, { code: 'USD' }), product.stock_quantity])
         })
 
+        console.log(table.toString())
+    }
+
+    displayDepartments(departments) {
+        let table = new Table({
+            head: ['ID', 'Name', 'Overhead Costs', 'Product Sales', 'Total Profit']
+        })
+        departments.forEach(department => {
+            table.push([department.department_id, department.department_name, currencyFormatter.format(department.over_head_costs, { code: 'USD' }), currencyFormatter.format(department.product_sales, { code: 'USD' }), currencyFormatter.format(department.total_profit, { code: 'USD' })])
+        })
         console.log(table.toString())
     }
 
@@ -66,8 +86,16 @@ class BamazonProductManager {
         })
     }
 
-    addNewProduct(name, category, price, qty, callback) {
-        connection.query('INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?)', [name, category, price, qty, callback], (error, results, fields) => {
+    addNewDepartment(name, overhead, callback) {
+        connection.query('INSERT INTO departments (department_name, over_head_costs) VALUES (?, ?)', [name, overhead], (error, results, fields) => {
+            if (error) throw error
+
+            this.getAllDepartments(callback)
+        })
+    }
+
+    addNewProduct(name, department, price, qty, callback) {
+        connection.query('INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?)', [name, department, price, qty], (error, results, fields) => {
             if (error) throw error
 
             this.getAllProducts(callback)
