@@ -1,37 +1,37 @@
-## Welcome to GitHub Pages
+Amazon-like storefront.
 
-You can use the [editor on GitHub](https://github.com/merrazquin/bamazon/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Roles and Actions
+- `bamazonCustomer`
+  - View Products for Sale
+  - Purchase product
+- `bamazonManager`
+  - View Products for Sale
+  - View Low Inventory
+  - Add to Inventory
+  - Add New Product
+- `bamazonSupervisor`
+  - View Product Sales by Department
+  - Create New Department
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Tech Stack
+- Node.js
+- MySQL
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+## Dependencies
+```js
+{
+    "cli-table": "^0.3.1",
+    "colors": "^1.2.1",
+    "currency-formatter": "^1.4.2",
+    "dotenv": "^5.0.1",
+    "inquirer": "^5.2.0",
+    "mysql": "^2.15.0"
+}
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/merrazquin/bamazon/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+## Demo
+Coming soon
+<!--<script data-rows="20" src="https://asciinema.org/a/NbcTBW9W12ZDlVuJRExHx98WF.js" id="asciicast-NbcTBW9W12ZDlVuJRExHx98WF" async></script>
+<a href="https://asciinema.org/a/NbcTBW9W12ZDlVuJRExHx98WF?rows=30" target="_blank">demo link</a>-->
