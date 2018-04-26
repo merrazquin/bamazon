@@ -49,7 +49,7 @@ class BamazonProductManager {
     }
 
     processOrder(id, qty, price, callback) {
-        connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [qty, id], (error, results, fields) => {
+        connection.query('UPDATE products SET stock_quantity = stock_quantity - ?, product_sales = product_sales + ? WHERE item_id = ?', [qty, parseFloat((qty * price).toFixed(2)), id], (error, results, fields) => {
             if (error) throw error
 
             console.log('Purchase total:'.bold, currencyFormatter.format(qty * price, { code: 'USD' }).green)
