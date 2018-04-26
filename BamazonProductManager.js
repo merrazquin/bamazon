@@ -38,7 +38,7 @@ class BamazonProductManager {
     }
 
     getAllDepartments(callback) {
-        connection.query('SELECT d.department_id, d.department_name, d.over_head_costs, p.product_sales, COALESCE(p.product_sales, 0) - d.over_head_costs as total_profit FROM departments d LEFT JOIN products p ON d.department_name = p.department_name GROUP BY d.department_name ORDER BY d.department_id', (error, results, fields) => {
+        connection.query('SELECT d.department_id, d.department_name, d.over_head_costs, SUM(COALESCE(p.product_sales, 0)) as product_sales, SUM(COALESCE(p.product_sales, 0)) - d.over_head_costs as total_profit FROM departments d LEFT JOIN products p ON d.department_name = p.department_name GROUP BY d.department_name ORDER BY d.department_id', (error, results, fields) => {
                 if (error) throw error
 
                 if(callback != undefined) {
@@ -63,7 +63,7 @@ class BamazonProductManager {
             head: ['ID', 'Name', 'Overhead Costs', 'Product Sales', 'Total Profit']
         })
         departments.forEach(department => {
-            table.push([department.department_id, department.department_name, currencyFormatter.format(department.over_head_costs, { code: 'USD' }), currencyFormatter.format(department.product_sales, { code: 'USD' }), currencyFormatter.format(department.total_profit, { code: 'USD' })])
+            table.push([department.department_id, department.department_name, currencyFormatter.format(department.over_head_costs, { code: 'USD' }), currencyFormatter.format(department.product_sales, { code: 'USD' }), currencyFormatter.format(department.total_profit, { code: 'USD' })[department.total_profit > 0 ? "green" : "red"]])
         })
         console.log(table.toString())
     }
