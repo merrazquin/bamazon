@@ -1,41 +1,12 @@
 const INSUFFICIENT_MSG = 'Insufficient quantity!'
 
-require('dotenv').config()
-const Table = require('cli-table'),
-    inquirer = require('inquirer'),
-    currencyFormatter = require('currency-formatter'),
-    colors = require('colors'),
-    mysql = require('mysql'),
-    connection = mysql.createConnection({
-        host: 'localhost',
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: 'bamazon'
-    })
-connection.connect()
+const inquirer = require('inquirer'),
+    BamazonProductManager = require('./BamazonProductManager'),
+    productManager = new BamazonProductManager()
 
-let productCache
+function promptSale(products) {
+    productManager.displayProducts(products)
 
-function displayProducts() {
-    connection.query('SELECT * FROM products', (error, results, fields) => {
-        if (error) throw error
-
-        productCache = results
-
-        let table = new Table({
-            head: ['ID', 'Name', 'Department', 'Price', 'Stock']
-        })
-        results.forEach(product => {
-            table.push([product.item_id, product.product_name, product.department_name, currencyFormatter.format(product.price, { code: 'USD' }), product.stock_quantity])
-        })
-
-        console.log(table.toString())
-
-        promptSale()
-    })
-}
-
-function promptSale() {
     inquirer.prompt([
         {
             type: 'input',
@@ -46,7 +17,7 @@ function promptSale() {
                     return 'Please enter a numbrer'
                 }
 
-                if (!findProductById(input)) {
+                if (!productManager.findProductById(input)) {
                     return 'Please enter a valid product number'
                 }
 
@@ -56,45 +27,28 @@ function promptSale() {
         {
             type: 'input',
             name: 'qty',
-            message: 'Enter the quantity',
+            message: "Enter the quantity you'd like to purchase",
             validate: input => {
-                if (isNaN(input)) {
-                    return 'Please enter a number'
+                if (isNaN(input) || input < 1 || input % 1 < 0) {
+                    return 'Please enter a positive integer'
                 }
 
                 return true
             }
         }
     ]).then(response => {
-        let product = findProductById(response.id)
+        let product = productManager.findProductById(response.id)
         if (!product) {
             console.log('Product not found')
-            promptSale()
+            promptSale(products)
         } else if (product.stock_quantity < parseInt(response.qty)) {
             console.log(INSUFFICIENT_MSG)
             console.log('*'.repeat(INSUFFICIENT_MSG.length))
-            promptSale()
+            promptSale(products)
         } else {
-            processOrder(product.item_id, response.qty, product.price)
+            productManager.processOrder(product.item_id, response.qty, product.price, promptSale)
         }
     })
 }
 
-function processOrder(id, qty, price) {
-    connection.query('UPDATE products SET stock_quantity = stock_quantity - ' + qty + ' WHERE item_id = ' + id, (error, results, fields) => {
-        if (error) throw error
-
-        console.log('Purchase total:'.bold, currencyFormatter.format(qty * price, { code: 'USD' }).green)
-        displayProducts()
-    })
-}
-
-function findProductById(id) {
-    if (!productCache) return null
-
-    return productCache.find(product => { return product.item_id == id })
-}
-
-displayProducts()
-
-// connection.end()
+productManager.getAllProducts(promptSale)
