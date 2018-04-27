@@ -11,13 +11,18 @@ const Table = require('cli-table'),
         database: 'bamazon'
     })
 
-connection.connect(err => {
-    if (err) throw err
-})
-
 let productCache
 
 class BamazonProductManager {
+    constructor(callback) {
+        connection.connect(err => {
+            if (err) throw err
+
+            if(callback != undefined) {
+                callback()
+            }
+        })
+    }
     getAllProducts(callback) {
         connection.query(
             `SELECT * 
@@ -146,6 +151,10 @@ class BamazonProductManager {
         if (!productCache) return null
 
         return productCache.find(product => { return product.item_id == id })
+    }
+
+    exit() {
+        connection.end()
     }
 
 }

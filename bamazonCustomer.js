@@ -2,7 +2,11 @@ const INSUFFICIENT_MSG = 'Insufficient quantity!'
 
 const inquirer = require('inquirer'),
     BamazonProductManager = require('./BamazonProductManager'),
-    productManager = new BamazonProductManager()
+    productManager = new BamazonProductManager(onInit)
+
+function onInit() {
+    productManager.getAllProducts(promptSale)
+}
 
 function promptSale(products) {
     productManager.displayProducts(products)
@@ -51,4 +55,10 @@ function promptSale(products) {
     })
 }
 
-productManager.getAllProducts(promptSale)
+
+function exitHandler(options, err) {
+    productManager.exit()
+    if (options.exit) process.exit()
+}
+
+process.on('SIGINT', exitHandler.bind(null, { exit: true }))

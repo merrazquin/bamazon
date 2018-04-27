@@ -1,6 +1,10 @@
 const inquirer = require('inquirer'),
     BamazonProductManager = require('./BamazonProductManager'),
-    productManager = new BamazonProductManager()
+    productManager = new BamazonProductManager(onConnected)
+
+function onConnected() {
+    productManager.getAllProducts(managerMenu)
+}
 
 function managerMenu() {
     inquirer.prompt({
@@ -107,4 +111,9 @@ function notEmpty(input) {
     return true
 }
 
-productManager.getAllProducts(managerMenu)
+function exitHandler(options, err) {
+    productManager.exit()
+    if (options.exit) process.exit()
+}
+
+process.on('SIGINT', exitHandler.bind(null, { exit: true }))
