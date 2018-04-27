@@ -10,7 +10,10 @@ const Table = require('cli-table'),
         password: process.env.DB_PASSWORD,
         database: 'bamazon'
     })
-connection.connect()
+
+connection.connect(err => {
+    if (err) throw err
+})
 
 let productCache
 
@@ -111,9 +114,12 @@ class BamazonProductManager {
 
     addNewDepartment(name, overhead, callback) {
         connection.query(
-            `INSERT INTO departments (department_name, over_head_costs) 
-            VALUES (?, ?)`,
-            [name, overhead], (error, results, fields) => {
+            `INSERT INTO departments SET ?`,
+            {
+                department_name: name,
+                over_head_costs: overhead
+            },
+            (error, results, fields) => {
                 if (error) throw error
 
                 this.getAllDepartments(callback)
@@ -122,9 +128,14 @@ class BamazonProductManager {
 
     addNewProduct(name, department, price, qty, callback) {
         connection.query(
-            `INSERT INTO products (product_name, department_name, price, stock_quantity) 
-            VALUES (?, ?, ?, ?)`,
-            [name, department, price, qty], (error, results, fields) => {
+            `INSERT INTO products SET ?`,
+            {
+                product_name: name,
+                department_name: department,
+                price: price,
+                stock_quantity: qty
+            },
+            (error, results, fields) => {
                 if (error) throw error
 
                 this.getAllProducts(callback)
