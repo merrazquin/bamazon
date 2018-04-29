@@ -46,8 +46,9 @@ function promptSale(products) {
             console.log('Product not found')
             promptSale(products)
         } else if (product.stock_quantity < parseInt(response.qty)) {
-            console.log(INSUFFICIENT_MSG)
-            console.log('*'.repeat(INSUFFICIENT_MSG.length))
+            console.log('*'.repeat(INSUFFICIENT_MSG.length).red)
+            console.log(INSUFFICIENT_MSG.red)
+            console.log('*'.repeat(INSUFFICIENT_MSG.length).red)
             promptSale(products)
         } else {
             productManager.processOrder(product.item_id, response.qty, product.price, promptSale)

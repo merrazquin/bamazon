@@ -74,7 +74,7 @@ class BamazonProductManager {
             head: ['ID', 'Name', 'Department', 'Price', 'Stock']
         })
         products.forEach(product => {
-            table.push([product.item_id, product.product_name, product.department_name, currencyFormatter.format(product.price, { code: 'USD' }), product.stock_quantity])
+            table.push([product.item_id, product.product_name.bold, product.department_name, currencyFormatter.format(product.price, { code: 'USD' }), product.stock_quantity])
         })
 
         console.log(table.toString())
@@ -85,7 +85,7 @@ class BamazonProductManager {
             head: ['ID', 'Name', 'Overhead Costs', 'Product Sales', 'Total Profit']
         })
         departments.forEach(department => {
-            table.push([department.department_id, department.department_name, currencyFormatter.format(department.over_head_costs, { code: 'USD' }), currencyFormatter.format(department.product_sales, { code: 'USD' }), currencyFormatter.format(department.total_profit, { code: 'USD' })[department.total_profit > 0 ? "green" : "red"]])
+            table.push([department.department_id, department.department_name.bold, currencyFormatter.format(department.over_head_costs, { code: 'USD' }), currencyFormatter.format(department.product_sales, { code: 'USD' }), currencyFormatter.format(department.total_profit, { code: 'USD' })[department.total_profit > 0 ? "green" : "red"]])
         })
         console.log(table.toString())
     }
@@ -99,7 +99,7 @@ class BamazonProductManager {
             [qty, parseFloat((qty * price).toFixed(2)), id], (error, results, fields) => {
                 if (error) throw error
 
-                console.log('Purchase total:'.bold, currencyFormatter.format(qty * price, { code: 'USD' }).green)
+                console.log('Purchase total:'.bold.green, currencyFormatter.format(qty * price, { code: 'USD' }).green)
 
                 this.getAllProducts(callback)
             })
