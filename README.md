@@ -1,5 +1,7 @@
 Amazon-like storefront.
 
+<a href="https://github.com/merrazquin/bamazon">Source code</a>
+
 Roles and Actions
 - `bamazonCustomer`
   - View Products for Sale
