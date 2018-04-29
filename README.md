@@ -34,13 +34,13 @@ Roles and Actions
 ## Demos
 
 ### Customer
-<script data-rows="20" src="https://asciinema.org/a/PLiL3Vdp2WAn3wioqSCVnorqO.js" id="asciicast-PLiL3Vdp2WAn3wioqSCVnorqO" async></script>
-<a href="https://asciinema.org/a/PLiL3Vdp2WAn3wioqSCVnorqO?rows=30" target="_blank">demo link</a>
+<script src="https://asciinema.org/a/PLiL3Vdp2WAn3wioqSCVnorqO.js" id="asciicast-PLiL3Vdp2WAn3wioqSCVnorqO" async></script>
+<a href="https://asciinema.org/a/PLiL3Vdp2WAn3wioqSCVnorqO" target="_blank">demo link</a>
 
 ### Manager
-<script data-rows="20" src="https://asciinema.org/a/cX7JlV0XDB4vl997unw5P8vtZ.js" id="asciicast-cX7JlV0XDB4vl997unw5P8vtZ" async></script>
-<a href="https://asciinema.org/a/cX7JlV0XDB4vl997unw5P8vtZ?rows=30" target="_blank">demo link</a>
+<script ]src="https://asciinema.org/a/cX7JlV0XDB4vl997unw5P8vtZ.js" id="asciicast-cX7JlV0XDB4vl997unw5P8vtZ" async></script>
+<a href="https://asciinema.org/a/cX7JlV0XDB4vl997unw5P8vtZ" target="_blank">demo link</a>
 
 ### Supervisor
-<script data-rows="20" src="https://asciinema.org/a/MJjnuFqcXFD26UxFLVgpVAIam.js" id="asciicast-MJjnuFqcXFD26UxFLVgpVAIam" async></script>
-<a href="https://asciinema.org/a/MJjnuFqcXFD26UxFLVgpVAIam?rows=30" target="_blank">demo link</a>
+<script src="https://asciinema.org/a/MJjnuFqcXFD26UxFLVgpVAIam.js" id="asciicast-MJjnuFqcXFD26UxFLVgpVAIam" async></script>
+<a href="https://asciinema.org/a/MJjnuFqcXFD26UxFLVgpVAIam" target="_blank">demo link</a>
