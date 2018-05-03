@@ -59,45 +59,48 @@ function promptToAddInventory(callback) {
 }
 
 function promptToAddProduct(callback) {
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'name',
-            message: 'Enter the product name',
-            validate: notEmpty
-        },
-        {
-            type: 'input',
-            name: 'department',
-            message: 'Enter the department name',
-            validate: notEmpty
-        },
-        {
-            type: 'input',
-            name: 'price',
-            message: 'Enter the unit price',
-            validate: input => {
-                if (!input || isNaN(input)) {
-                    return 'Please enter a dollar value'
-                }
+    productManager.getAllDepartments((res) => {
+        let depts = res.map(dept => dept.department_name).sort()
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: 'Enter the product name',
+                validate: notEmpty
+            },
+            {
+                type: 'list',
+                name: 'department',
+                message: 'Select a department',
+                choices: depts
+            },
+            {
+                type: 'input',
+                name: 'price',
+                message: 'Enter the unit price',
+                validate: input => {
+                    if (!input || isNaN(input)) {
+                        return 'Please enter a dollar value'
+                    }
 
-                return true
-            }
-        },
-        {
-            type: 'input',
-            name: 'qty',
-            message: "Stock available",
-            validate: input => {
-                if (!input || isNaN(input) || input < 1 || input % 1 < 0) {
-                    return 'Please enter a positive integer'
+                    return true
                 }
+            },
+            {
+                type: 'input',
+                name: 'qty',
+                message: "Stock available",
+                validate: input => {
+                    if (!input || isNaN(input) || input < 1 || input % 1 < 0) {
+                        return 'Please enter a positive integer'
+                    }
 
-                return true
+                    return true
+                }
             }
-        }
-    ]).then(response => {
-        productManager.addNewProduct(response.name, response.department, parseFloat(response.price).toFixed(2), response.qty, callback)
+        ]).then(response => {
+            productManager.addNewProduct(response.name, response.department, parseFloat(response.price).toFixed(2), response.qty, callback)
+        })
     })
 }
 
