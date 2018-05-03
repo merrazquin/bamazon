@@ -15,7 +15,8 @@ function managerMenu() {
             { name: 'View Products for Sale', value: productManager.getAllProducts },
             { name: 'View Low Inventory', value: productManager.getLowInventory },
             { name: 'Add to Inventory', value: promptToAddInventory },
-            { name: 'Add New Product', value: promptToAddProduct }
+            { name: 'Add New Product', value: promptToAddProduct },
+            { name: '[exit]', value: process.exit }
         ]
     }).then(response => {
         response.action.apply(this, [displayProducts])
@@ -116,4 +117,5 @@ function exitHandler(options, err) {
     if (options.exit) process.exit()
 }
 
+process.on('exit', exitHandler.bind(null))
 process.on('SIGINT', exitHandler.bind(null, { exit: true }))

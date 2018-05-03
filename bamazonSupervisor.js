@@ -9,7 +9,8 @@ function supervisorMenu() {
         message: 'Choose an action',
         choices: [
             { name: 'View Product Sales by Department', value: productManager.getAllDepartments },
-            { name: 'Create New Department', value: promptToAddDepartment }
+            { name: 'Create New Department', value: promptToAddDepartment }, 
+            { name: '[exit]', value: process.exit }
         ]
     }).then(response => {
         response.action.apply(this, [displayDepartments])
@@ -57,4 +58,5 @@ function exitHandler(options, err) {
     if (options.exit) process.exit()
 }
 
+process.on('exit', exitHandler.bind(null))
 process.on('SIGINT', exitHandler.bind(null, { exit: true }))

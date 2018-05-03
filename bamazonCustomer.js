@@ -15,10 +15,12 @@ function promptSale(products) {
         {
             type: 'input',
             name: 'id',
-            message: 'Enter the product ID',
+            message: 'Enter the product ID (or "q" to exit)',
             validate: input => {
+                if(input.toLowerCase() == 'q') process.exit()
+
                 if (isNaN(input)) {
-                    return 'Please enter a numbrer'
+                    return 'Please enter a number'
                 }
 
                 if (!productManager.findProductById(input)) {
@@ -31,8 +33,10 @@ function promptSale(products) {
         {
             type: 'input',
             name: 'qty',
-            message: "Enter the quantity you'd like to purchase",
+            message: "Enter the quantity you'd like to purchase (or \"q\" to exit)",
             validate: input => {
+                if(input.toLowerCase() == 'q') process.exit()
+
                 if (isNaN(input) || input < 1 || input % 1 < 0) {
                     return 'Please enter a positive integer'
                 }
@@ -62,4 +66,5 @@ function exitHandler(options, err) {
     if (options.exit) process.exit()
 }
 
+process.on('exit', exitHandler.bind(null))
 process.on('SIGINT', exitHandler.bind(null, { exit: true }))
